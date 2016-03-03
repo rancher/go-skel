@@ -22,6 +22,8 @@ FILES="
 ./scripts/version
 ./scripts/entry
 ./scripts/package
+./scripts/test
+./scripts/validate
 "
 
 
