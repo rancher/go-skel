@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 if [ "$#" != 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     echo Usage: $0 NEW-APP-NAME
@@ -12,6 +13,7 @@ FILES="
 ./README.md.in
 ./Makefile
 ./.dockerignore
+./.drone.yml
 ./Dockerfile.dapper
 ./trash.yml
 ./LICENSE
