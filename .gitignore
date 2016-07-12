@@ -1,4 +1,5 @@
 /.dapper
 /bin
+/dist
 *.swp
 /.trash-cache
