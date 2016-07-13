@@ -6,6 +6,8 @@ if [ "$#" != 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
     exit 1
 fi
 
+BASE=$(dirname $0)
+
 APP=$1
 FILES="
 ./main.go
@@ -15,7 +17,7 @@ FILES="
 ./.dockerignore
 ./.drone.yml
 ./Dockerfile.dapper
-./trash.yml
+./trash.conf
 ./LICENSE
 ./package/Dockerfile
 ./scripts/release
@@ -34,7 +36,7 @@ mkdir -p $APP
 for i in $FILES; do
     mkdir -p $APP/$(dirname $i)
     echo Creating $APP/$i
-    sed -e "s/%APP%/$APP/g" $i > $APP/$i
+    sed -e "s/%APP%/$APP/g" $BASE/$i > $APP/$i
     if echo $i | grep -q scripts; then
         echo chmod +x $APP/$i
         chmod +x $APP/$i
