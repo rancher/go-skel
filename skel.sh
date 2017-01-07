@@ -17,7 +17,7 @@ FILES="
 ./.dockerignore
 ./.drone.yml
 ./Dockerfile.dapper
-./trash.conf
+./vendor.conf
 ./LICENSE
 ./package/Dockerfile
 ./scripts/release
