@@ -13,6 +13,8 @@ TAG=${TAG:-${VERSION}${SUFFIX}}
 REPO=${REPO:-rancher}
 
 cp ../bin/%APP% .
-docker build -t ${REPO}/%APP%:${TAG} .
 
-echo Built ${REPO}/%APP%:${TAG}
+IMAGE=${REPO}/%APP%:${TAG}
+docker build -t ${IMAGE} .
+echo ${IMAGE} > ../dist/images
+echo Built ${IMAGE}
