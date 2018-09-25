@@ -19,5 +19,7 @@ func main() {
 		return nil
 	}
 
-	app.Run(os.Args)
+	if err := app.Run(os.Args); err != nil {
+		logrus.Fatal(err)
+	}
 }
