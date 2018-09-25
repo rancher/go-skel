@@ -45,10 +45,11 @@ done
 
 cd ./$APP
 mv README.md.in README.md
-make trash
+make deps
 
 git init
 git add -A
 git commit -m "Initial Commit"
+make
 
 echo Created $APP in ./$APP
