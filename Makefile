@@ -10,13 +10,9 @@ TARGETS := $(shell ls scripts)
 $(TARGETS): .dapper
 	./.dapper $@
 
-trash: .dapper
-	./.dapper -m bind trash
-
-trash-keep: .dapper
-	./.dapper -m bind trash -k
-
-deps: trash
+deps: .dapper
+	./.dapper -m bind env GO111MODULE=on go mod vendor
+	./.dapper -m bind chown -R $$(id -u) vendor dist bin go.mod go.sum .cache
 
 .DEFAULT_GOAL := ci
 

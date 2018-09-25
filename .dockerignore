@@ -1,6 +1,4 @@
 ./bin
 ./.dapper
+./.cache
 ./dist
-./.trash-cache
-./trash.lock
-
