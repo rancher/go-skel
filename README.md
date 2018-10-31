@@ -5,7 +5,7 @@ Skeleton for Rancher Go Microservices
 
 ## Running
 
-`./skel.sh test123`
+`./skel.sh github.com/rancher/test123`
 
 That will create a folder `./test123` that will be the skeleton for a new go project expected to be at `github.com/rancher/test123`
 
