@@ -1,3 +1,3 @@
-FROM ubuntu:16.04
+FROM alpine
 COPY %APP% /usr/bin/
 CMD ["%APP%"]
