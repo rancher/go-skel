@@ -61,14 +61,19 @@ for i in $FILES; do
     fi
 done
 
+if [ -e .trash-cache ] && [ ! -e $APP/.trash-cache ]; then
+    cp -rf .trash-cache $APP
+fi
+
 cd ./$APP
 mv README.md.in README.md
 make deps
+./.dapper -m bind go fmt ./main.go
+./.dapper -m bind go fmt ./types/... ./pkg/...
 ./.dapper -m bind env go generate
-./.dapper -m bind env chown -R $(id -u) types
+./.dapper -m bind env chown -R $(id -u) types .trash-cache
 make deps
-
-rm vendor.conf
+./.dapper -m bind env chown -R $(id -u) types .trash-cache
 
 git init
 git add -A
@@ -79,4 +84,5 @@ done
 
 make
 
+rm -rf .trash-cache
 echo Created $APP in ./$APP
