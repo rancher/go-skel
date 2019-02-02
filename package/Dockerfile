@@ -1,3 +1,3 @@
 FROM alpine
-COPY %APP% /usr/bin/
+COPY bin/%APP% /usr/bin/
 CMD ["%APP%"]

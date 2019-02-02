@@ -71,9 +71,9 @@ make deps
 ./.dapper -m bind go fmt ./main.go
 ./.dapper -m bind go fmt ./types/... ./pkg/...
 ./.dapper -m bind env go generate
-./.dapper -m bind env chown -R $(id -u) types .trash-cache
 make deps
-./.dapper -m bind env chown -R $(id -u) types .trash-cache
+./.dapper -m bind rm -rf .cache
+./.dapper -m bind env chown -R $(id -u) .
 
 git init
 git add -A
