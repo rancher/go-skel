@@ -5,7 +5,6 @@ go 1.12
 //pin rancher/moq and kubernetes-1.13.5
 replace (
 	github.com/matryer/moq => github.com/rancher/moq v0.0.0-20190404221404-ee5226d43009
-	github.com/rancher/wrangler => /Users/luther/r/wrangler/src/github.com/rancher/wrangler
 	k8s.io/api => k8s.io/api v0.0.0-20190222213804-5cb15d344471
 	k8s.io/apiextensions-apiserver => k8s.io/apiextensions-apiserver v0.0.0-20190325193600-475668423e9f
 	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20190221213512-86fb29eff628
@@ -14,8 +13,5 @@ replace (
 )
 
 require (
-	github.com/rancher/wrangler v0.0.0-20190429235843-3913de05fb61
-	k8s.io/apimachinery v0.0.0-00010101000000-000000000000
-	k8s.io/client-go v0.0.0-00010101000000-000000000000
-	k8s.io/klog v0.3.0
+	github.com/rancher/wrangler master
 )
