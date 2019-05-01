@@ -26,9 +26,8 @@ FILES="
 ./main.go
 ./Makefile
 ./package/Dockerfile
-./pkg/controllers/foo/controller.go
-./pkg/server/server.go
 ./README.md.in
+./hack/boilerplate.go.txt
 ./scripts/build
 ./scripts/ci
 ./scripts/entry
@@ -37,12 +36,13 @@ FILES="
 ./scripts/test
 ./scripts/validate
 ./scripts/version
-./types/apis/some.api.group/v1/types.go
-./types/codegen/cleanup/main.go
-./types/codegen/main.go
-./vendor.conf
+./pkg/apis/some.api.group/v1/types.go
+./pkg/codegen/cleanup/main.go
+./pkg/codegen/main.go
+./pkg/foo/controller.go
+./pkg/foo/controller_test.go
+./go.mod
 "
-
 
 mkdir -p $APP
 
@@ -66,14 +66,21 @@ if [ -e .trash-cache ] && [ ! -e $APP/.trash-cache ]; then
 fi
 
 cd ./$APP
+go mod vendor
+go generate
+go mod vendor #update again after generated code
+
 mv README.md.in README.md
-make deps
-./.dapper -m bind go fmt ./main.go
-./.dapper -m bind go fmt ./types/... ./pkg/...
-./.dapper -m bind env go generate
-make deps
-./.dapper -m bind rm -rf .cache
-./.dapper -m bind env chown -R $(id -u) .
+
+#make deps
+#./.dapper -m bind go fmt ./main.go
+#./.dapper -m bind go fmt ./types/... ./pkg/...
+#./.dapper -m bind env go generate
+#./.dapper -m bind env go generate
+
+#make deps
+#./.dapper -m bind rm -rf .cache
+#./.dapper -m bind env chown -R $(id -u) .
 
 git init
 git add -A
