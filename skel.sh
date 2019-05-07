@@ -61,10 +61,6 @@ for i in $FILES; do
     fi
 done
 
-if [ -e .trash-cache ] && [ ! -e $APP/.trash-cache ]; then
-    cp -rf .trash-cache $APP
-fi
-
 cd ./$APP
 go mod vendor
 go generate
@@ -91,5 +87,4 @@ done
 
 make
 
-rm -rf .trash-cache
 echo Created $APP in ./$APP
