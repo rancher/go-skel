@@ -1,60 +1,50 @@
-//go:generate go run types/codegen/cleanup/main.go
-//go:generate go run types/codegen/main.go
+//go:generate go run pkg/codegen/cleanup/main.go
+//go:generate /bin/rm -rf pkg/generated
+//go:generate go run pkg/codegen/main.go
 
 package main
 
 import (
 	"context"
-	"os"
-
-	"%PKG%/pkg/server"
-	"github.com/rancher/norman"
-	"github.com/rancher/norman/pkg/resolvehome"
-	"github.com/rancher/norman/signal"
-	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
+	"flag"
+	"%PKG%/pkg/foo"
+	"%PKG%/pkg/generated/controllers/some.api.group"
+	"github.com/rancher/wrangler/pkg/signals"
+	"github.com/rancher/wrangler/pkg/start"
+	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/klog"
 )
 
 var (
-	VERSION = "v0.0.0-dev"
+	masterURL  string
+	kubeconfig string
 )
 
 func main() {
-	app := cli.NewApp()
-	app.Name = "%APP%"
-	app.Version = VERSION
-	app.Usage = "%APP% needs help!"
-	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:   "kubeconfig",
-			EnvVar: "KUBECONFIG",
-			Value:  "${HOME}/.kube/config",
-		},
-	}
-	app.Action = run
+	flag.Parse()
 
-	if err := app.Run(os.Args); err != nil {
-		logrus.Fatal(err)
+	ctx := signals.SetupSignalHandler(context.Background())
+
+	cfg, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
+	if err != nil {
+		klog.Fatalf("Error building kubeconfig: %s", err.Error())
 	}
+
+	foos, err := some.NewFactoryFromConfig(cfg)
+	if err != nil {
+		klog.Fatalf("Error building sample controllers: %s", err.Error())
+	}
+
+	foo.Register(ctx, foos.Some().V1().Foo())
+
+	if err := start.All(ctx, 2, foos); err != nil {
+		klog.Fatalf("Error starting: %s", err.Error())
+	}
+
+	<-ctx.Done()
 }
 
-func run(c *cli.Context) error {
-	logrus.Info("Starting controller")
-	ctx := signal.SigTermCancelContext(context.Background())
-
-	kubeConfig, err := resolvehome.Resolve(c.String("kubeconfig"))
-	if err != nil {
-		return err
-	}
-
-	ctx, _, err = server.Config().Build(ctx, &norman.Options{
-		K8sMode:    "external",
-		KubeConfig: kubeConfig,
-	})
-
-	if err != nil {
-		return err
-	}
-	<-ctx.Done()
-	return nil
+func init() {
+	flag.StringVar(&kubeconfig, "kubeconfig", "", "Path to a kubeconfig. Only required if out-of-cluster.")
+	flag.StringVar(&masterURL, "master", "", "The address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster.")
 }
