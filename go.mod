@@ -13,9 +13,10 @@ replace (
 )
 
 require (
-	github.com/rancher/wrangler v0.0.0-20190507213151-11fc1ecb7bdb
+	github.com/rancher/wrangler master
+	github.com/sirupsen/logrus v1.4.1
 	github.com/stretchr/testify v1.3.0
+	github.com/urfave/cli v1.20.0
 	k8s.io/apimachinery v0.0.0-20190221213512-86fb29eff628
 	k8s.io/client-go v2.0.0-alpha.0.0.20190307161346-7621a5ebb88b+incompatible
-	k8s.io/klog v0.2.0
 )
