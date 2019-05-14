@@ -20,6 +20,7 @@ IMAGE=$REPO/$APP
 FILES="
 ./Dockerfile.dapper
 ./.dockerignore
+./.golangci.json
 ./.drone.yml
 ./.gitignore
 ./LICENSE
