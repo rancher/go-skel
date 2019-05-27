@@ -20,6 +20,7 @@ IMAGE=$REPO/$APP
 FILES="
 ./Dockerfile.dapper
 ./.dockerignore
+./.golangci.json
 ./.drone.yml
 ./.gitignore
 ./LICENSE
@@ -27,7 +28,7 @@ FILES="
 ./Makefile
 ./package/Dockerfile
 ./README.md.in
-./hack/boilerplate.go.txt
+./scripts/boilerplate.go.txt
 ./scripts/build
 ./scripts/ci
 ./scripts/entry
@@ -35,6 +36,7 @@ FILES="
 ./scripts/release
 ./scripts/test
 ./scripts/validate
+./scripts/validate-ci
 ./scripts/version
 ./pkg/apis/some.api.group/v1/types.go
 ./pkg/codegen/cleanup/main.go
@@ -64,19 +66,11 @@ done
 cd ./$APP
 go mod vendor
 go generate
+make .dapper
+./.dapper -m bind goimports -w .
 go mod vendor #update again after generated code
 
 mv README.md.in README.md
-
-#make deps
-#./.dapper -m bind go fmt ./main.go
-#./.dapper -m bind go fmt ./types/... ./pkg/...
-#./.dapper -m bind env go generate
-#./.dapper -m bind env go generate
-
-#make deps
-#./.dapper -m bind rm -rf .cache
-#./.dapper -m bind env chown -R $(id -u) .
 
 git init
 git add -A
@@ -85,6 +79,6 @@ while ! git gc; do
     sleep 2
 done
 
-make
+make ci
 
 echo Created $APP in ./$APP
