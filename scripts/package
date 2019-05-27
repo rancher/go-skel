@@ -3,17 +3,7 @@ set -e
 
 source $(dirname $0)/version
 
-ARCH=${ARCH:-"amd64"}
-SUFFIX="-${ARCH}"
-
 cd $(dirname $0)/..
-
-TAG=${TAG:-${VERSION}${SUFFIX}}
-REPO=${REPO:-%REPO%}
-
-if echo $TAG | grep -q dirty; then
-    TAG=dev
-fi
 
 mkdir -p dist/artifacts
 cp bin/%APP% dist/artifacts/%APP%${SUFFIX}

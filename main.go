@@ -7,6 +7,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"%PKG%/pkg/foo"
 	"%PKG%/pkg/generated/controllers/some.api.group"
 	"github.com/rancher/wrangler/pkg/resolvehome"
@@ -19,13 +20,14 @@ import (
 )
 
 var (
-	VERSION = "v0.0.0-dev"
+	Version = "v0.0.0-dev"
+	GitCommit = "HEAD"
 )
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "testy"
-	app.Version = VERSION
+	app.Version = fmt.Sprintf("%s (%s)", Version, GitCommit)
 	app.Usage = "testy needs help!"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
