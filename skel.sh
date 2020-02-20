@@ -31,6 +31,7 @@ FILES="
 ./scripts/boilerplate.go.txt
 ./scripts/build
 ./scripts/ci
+./scripts/default
 ./scripts/entry
 ./scripts/package
 ./scripts/release
@@ -42,10 +43,10 @@ FILES="
 ./pkg/codegen/cleanup/main.go
 ./pkg/codegen/main.go
 ./pkg/foo/controller.go
-./pkg/foo/controller_test.go
 ./go.mod
 "
 
+rm -rf $APP
 mkdir -p $APP
 
 for i in $FILES; do
@@ -64,13 +65,12 @@ for i in $FILES; do
 done
 
 cd ./$APP
-go mod vendor
 go generate
+go mod tidy
+go mod vendor
 make .dapper
 ./.dapper -m bind goimports -w .
-go mod vendor #update again after generated code
-
-mv README.md.in README.md
+./.dapper -m bind rm -rf .cache dist bin
 
 git init
 git add -A
