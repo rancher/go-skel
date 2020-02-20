@@ -10,18 +10,17 @@ import (
 	"fmt"
 	"%PKG%/pkg/foo"
 	"%PKG%/pkg/generated/controllers/some.api.group"
-	"github.com/rancher/wrangler/pkg/resolvehome"
+	"github.com/rancher/wrangler/pkg/kubeconfig"
 	"github.com/rancher/wrangler/pkg/signals"
 	"github.com/rancher/wrangler/pkg/start"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"k8s.io/client-go/tools/clientcmd"
-	"os"
 )
 
 var (
 	Version = "v0.0.0-dev"
 	GitCommit = "HEAD"
+	KubeConfig string
 )
 
 func main() {
@@ -33,12 +32,7 @@ func main() {
 		cli.StringFlag{
 			Name:   "kubeconfig",
 			EnvVar: "KUBECONFIG",
-			Value:  "${HOME}/.kube/config",
-		},
-		cli.StringFlag{
-			Name:   "masterurl",
-			EnvVar: "MASTERURL",
-			Value:  "",
+			Destination: &KubeConfig,
 		},
 	}
 	app.Action = run
@@ -54,18 +48,12 @@ func run(c *cli.Context) {
 	logrus.Info("Starting controller")
 	ctx := signals.SetupSignalHandler(context.Background())
 
-	kubeconfig, err := resolvehome.Resolve(c.String("kubeconfig"))
+	kubeConfig, err := kubeconfig.GetNonInteractiveClientConfig(KubeConfig).ClientConfig()
 	if err != nil {
-		logrus.Fatalf("Error resolving home dir: %s", err.Error())
-	}
-	masterurl := c.String("masterurl")
-
-	cfg, err := clientcmd.BuildConfigFromFlags(masterurl, kubeconfig)
-	if err != nil {
-		logrus.Fatalf("Error building kubeconfig: %s", err.Error())
+		logrus.Fatalf("failed to find kubeconfig: %v", err)
 	}
 
-	foos, err := some.NewFactoryFromConfig(cfg)
+	foos, err := some.NewFactoryFromConfig(kubeConfig)
 	if err != nil {
 		logrus.Fatalf("Error building sample controllers: %s", err.Error())
 	}
