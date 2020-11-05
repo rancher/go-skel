@@ -8,7 +8,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"%PKG%/pkg/foo"
+//	"%PKG%/pkg/foo"
 	"%PKG%/pkg/generated/controllers/some.api.group"
 	"github.com/rancher/wrangler/pkg/kubeconfig"
 	"github.com/rancher/wrangler/pkg/signals"
