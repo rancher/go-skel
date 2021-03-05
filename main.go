@@ -7,26 +7,25 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"%PKG%/pkg/foo"
 	"%PKG%/pkg/generated/controllers/some.api.group"
+	"%PKG%/pkg/version"
 	"github.com/rancher/wrangler/pkg/kubeconfig"
 	"github.com/rancher/wrangler/pkg/signals"
 	"github.com/rancher/wrangler/pkg/start"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
+	"os"
 )
 
 var (
-	Version = "v0.0.0-dev"
-	GitCommit = "HEAD"
 	KubeConfig string
 )
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "testy"
-	app.Version = fmt.Sprintf("%s (%s)", Version, GitCommit)
+	app.Version = version.FriendlyVersion()
 	app.Usage = "testy needs help!"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
