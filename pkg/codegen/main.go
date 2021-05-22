@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"%PKG%/pkg/apis/some.api.group/v1"
-	"github.com/rancher/wrangler/pkg/controller-gen"
+	controllergen "github.com/rancher/wrangler/pkg/controller-gen"
 	"github.com/rancher/wrangler/pkg/controller-gen/args"
 )
 
