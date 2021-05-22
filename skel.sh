@@ -43,7 +43,8 @@ FILES="
 ./pkg/codegen/cleanup/main.go
 ./pkg/codegen/main.go
 ./pkg/foo/controller.go
-./go.mod
+./pkg/version/version.go
+./go.mod.in
 "
 
 rm -rf $APP
@@ -65,9 +66,10 @@ for i in $FILES; do
 done
 
 cd ./$APP
+mv -f go.mod.in go.mod
+go mod download
 go generate
 go mod tidy
-go mod vendor
 make .dapper
 ./.dapper -m bind goimports -w .
 ./.dapper -m bind rm -rf .cache dist bin
