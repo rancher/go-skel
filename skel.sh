@@ -45,6 +45,9 @@ FILES="
 ./pkg/foo/controller.go
 ./pkg/version/version.go
 ./go.mod.in
+./.github/workflows/stale.yml
+./CODEOWNERS
+./CODE_OF_CONDUCT
 "
 
 rm -rf $APP
@@ -68,8 +71,9 @@ done
 cd ./$APP
 mv -f go.mod.in go.mod
 go mod download
-go generate
 go mod tidy
+go mod verify
+go generate
 make .dapper
 ./.dapper -m bind goimports -w .
 ./.dapper -m bind rm -rf .cache dist bin
